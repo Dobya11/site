@@ -231,8 +231,7 @@ export default function HomePage() {
   return (
     <div className="relative flex flex-1 flex-col overflow-hidden">
       <GitInfoButton />
-      <Spotlight />
-      
+      <Spotlight />      
       {/* <div className="absolute top-4 right-4 z-10 max-w-xs">
         <p className="text-right text-xs text-muted-foreground mb-2">
           Proudly sponsored by
