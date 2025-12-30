@@ -25,11 +25,11 @@ export default async function Page(
   const messages = require(`@/../messages/${params.lang}.json`);
 
   const MDX = page.data.body;
-  const lastModified = await getGithubLastEdit({
-    owner: "HytaleModding",
-    repo: "site",
-    path: `content/docs/${page.path}`
-  })
+  // const lastModified = await getGithubLastEdit({
+  //   owner: "HytaleModding",
+  //   repo: "site",
+  //   path: `content/docs/${page.path}`
+  // })
   const authors = page.data.authors;
 
   return (
@@ -82,7 +82,7 @@ export default async function Page(
           </div>
         )}
 
-        {lastModified && <PageLastUpdate date={lastModified} />}
+        {/* {lastModified && <PageLastUpdate date={lastModified} />} */}
       </DocsPage>
     </ViewTransition>
   );
