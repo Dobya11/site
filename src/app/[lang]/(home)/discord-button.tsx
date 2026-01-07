@@ -44,7 +44,7 @@ export function DiscordButton() {
                   <CircleUserIcon className="my-auto" />
                   {messages.home.memberCount.replace(
                     "{count}",
-                    stats.total_members.toString(),
+                    stats.total_members.toLocaleString(),
                   )}
                 </span>
               </p>
