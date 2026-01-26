@@ -47,8 +47,8 @@ const constFeaturedSponsors: FeaturedSponsor[] = [
     },
     website: "https://www.bisecthosting.com/",
     colors: {
-      light: { brandColor: "#1b57c4", backgroundColor: "#e4e7f2" },
-      dark: { brandColor: "#1b57c4", backgroundColor: "#020525" },
+      light: { brandColor: "#03ddff", backgroundColor: "#FFFFFF" },
+      dark: { brandColor: "#03ddff", backgroundColor: "#0D1129" },
     },
   },
   {
