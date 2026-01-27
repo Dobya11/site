@@ -40,16 +40,20 @@ public class YourPlayerData implements Component<EntityStore> {
 
     public static final BuilderCodec<YourPlayerData> CODEC =
             BuilderCodec.builder(YourPlayerData.class, YourPlayerData::new)
-            .addField(new KeyedCodec<>("SomeInteger", Codec.INTEGER),
+            .append(new KeyedCodec<>("SomeInteger", Codec.INTEGER),
                     (data, value) -> data.someInteger = value, // setter
                     data -> data.someInteger) // getter
-            .addField(new KeyedCodec<>("SomeString", Codec.STRING),
+            .addValidator(Validators.nonNull())
+            .add()
+            .append(new KeyedCodec<>("SomeString", Codec.STRING),
                     (data, value) -> data.someString = value, // setter
                     data -> data.someString) // getter
-            .addField(new KeyedCodec<>("SomeMap",
+            .add()
+            .append(new KeyedCodec<>("SomeMap",
                             new MapCodec<>(Codec.STRING, HashMap::new, false)),
                     (data, value) -> data.someMap = value, // setter
                     data -> data.someMap) // getter
+            .add()
             .build();
 
 
