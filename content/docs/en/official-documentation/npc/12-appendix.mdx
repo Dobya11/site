@@ -144,9 +144,9 @@ authors:
                     "DamageCalculator": {
                         "Type": "Absolute",
                         "BaseDamage": {
-                            "Physical": 10,
-                            "RandomPercentageModifier": 0.1
-                        }
+                            "Physical": 10
+                        },
+						"RandomPercentageModifier": 0.1
                     }
                 }
             ]
@@ -154,10 +154,12 @@ authors:
     },
     "StateTransitions": [
         {
-            "States": {
-                "From": ["Idle"],
-                "To": ["Sleep"]
-            },
+            "States": [
+				{
+					"From": ["Idle"],
+					"To": ["Sleep"]
+				}
+            ],
             "Actions": [
                 {
                     "Type": "PlayAnimation",
@@ -171,10 +173,12 @@ authors:
             ]
         },
         {
-            "States": {
-                "From": ["Sleep"],
-                "To": []
-            },
+            "States": [
+				{
+					"From": ["Sleep"],
+					"To": []
+				}
+			],
             "Actions": [
                 {
                     "Type": "PlayAnimation",
@@ -188,10 +192,12 @@ authors:
             ]
         },
         {
-            "States": {
-                "From": ["Idle"],
-                "To": ["Eat"]
-            },
+            "States": [
+				{
+					"From": ["Idle"],
+					"To": ["Eat"]
+				}
+			],
             "Actions": [
                 {
                     "Type": "Inventory",
@@ -209,10 +215,12 @@ authors:
             ]
         },
         {
-            "States": {
-                "From": ["CallRat"],
-                "To": ["Eat"]
-            },
+            "States": [
+				{
+					"From": ["CallRat"],
+					"To": ["Eat"]
+				}
+			],
             "Actions": [
                 {
                     "Type": "Inventory",
@@ -230,10 +238,12 @@ authors:
             ]
         },
         {
-            "States": {
-                "From": ["Eat"],
-                "To": []
-            },
+            "States": [
+				{
+					"From": ["Eat"],
+					"To": []
+				}
+			],
             "Actions": [
                 {
                     "Type": "PlayAnimation",
@@ -248,10 +258,12 @@ authors:
             ]
         },
         {
-            "States": {
-                "From": [],
-                "To": ["Combat"]
-            },
+            "States": [
+				{
+					"From": [],
+					"To": ["Combat"]
+				}
+			],
             "Actions": [
                 {
                     "Type": "PlayAnimation",
@@ -306,14 +318,14 @@ authors:
                             "ThroughWalls": false,
                             "AbsoluteDetectionRange": { "Compute": "AbsoluteDetectionRange" },
                             "Attitudes": ["Hostile"]
-                        },
-                        "Actions": [
-                            {
-                                "Type": "State",
-                                "State": "Alerted"
-                            }
-                        ]
-                    }
+                        }
+                    },
+					"Actions": [
+						{
+							"Type": "State",
+							"State": "Alerted"
+						}
+					]
                 },
                 {
                     "Sensor": {
@@ -396,7 +408,7 @@ authors:
                 {
                     "Reference": "Component_Instruction_Damage_Check",
                     "Modify": {
-                        "ExportStates": ["Alerted", "Alerted"],
+                        "_ExportStates": ["Alerted", "Alerted"],
                         "AlertedRange": { "Compute": "AlertedRange" }
                     }
                 },
@@ -411,14 +423,14 @@ authors:
                             "ThroughWalls": false,
                             "AbsoluteDetectionRange": { "Compute": "AbsoluteDetectionRange" },
                             "Attitudes": ["Hostile"]
-                        },
-                        "Actions": [
-                            {
-                                "Type": "State",
-                                "State": "Alerted"
-                            }
-                        ]
-                    }
+                        }
+                    },
+					"Actions": [
+						{
+							"Type": "State",
+							"State": "Alerted"
+						}
+					]
                 },
                 {
                     "Reference": "Component_Instruction_Play_Animation_In_State_For_Duration",
@@ -468,14 +480,14 @@ authors:
                             "ThroughWalls": false,
                             "AbsoluteDetectionRange": { "Compute": "AbsoluteDetectionRange" },
                             "Attitudes": ["Hostile"]
-                        },
-                        "Actions": [
-                            {
-                                "Type": "State",
-                                "State": "Alerted"
-                            }
-                        ]
-                    }
+                        }
+                    },
+				   "Actions": [
+						{
+							"Type": "State",
+							"State": "Alerted"
+						}
+					]
                 },
                 {
                     "Reference": "Component_Instruction_Play_Animation_In_State_For_Duration",
@@ -510,7 +522,7 @@ authors:
                 {
                     "Reference": "Component_Instruction_Damage_Check",
                     "Modify": {
-                        "ExportStates": ["Alerted", "Alerted"],
+                        "_ExportStates": ["Alerted", "Alerted"],
                         "AlertedRange": { "Compute": "AlertedRange" }
                     }
                 },
@@ -525,67 +537,75 @@ authors:
                             "ThroughWalls": false,
                             "AbsoluteDetectionRange": { "Compute": "AbsoluteDetectionRange" },
                             "Attitudes": ["Hostile"]
-                        },
-                        "Actions": [
-                            {
-                                "Type": "State",
-                                "State": "Alerted"
-                            }
-                        ]
-                    }
+                        }
+                    },
+					"Actions": [
+						{
+							"Type": "State",
+							"State": "Alerted"
+						}
+					]
                 },
                 {
                     "Sensor": {
                         "Type": "Mob",
                         "Range": 2.5,
-                        "Filters": {
-                            "Type": "NPCGroup",
-                            "IncludeGroups": { "Compute": "FoodNPCGroups" }
-                        },
-                        "Type": "LineOfSight",
-                        "HeadMotion": {
-                            "Type": "Watch"
-                        },
-                        "ActionsBlocking": true,
-                        "Actions": [
-                            {
-                                "Type": "PlayAnimation",
-                                "Slot": "Status",
-                                "Animation": "Swipe"
-                            },
-                            {
-                                "Type": "Timeout",
-                                "Delay": [0.1, 0.1],
-                                "Action": {
-                                    "Type": "Sequence",
-                                    "Actions": [
-                                        {
-                                            "Type": "Remove"
-                                        },
-                                        {
-                                            "Type": "State",
-                                            "State": "Eat"
-                                        }
-                                    ]
-                                }
-                            }
-                        ]
-                    }
+                        "Filters": [
+							{
+								"Type": "NPCGroup",
+								"IncludeGroups": { "Compute": "FoodNPCGroups" }
+							},
+							{
+								"Type": "LineOfSight"
+							}
+						]
+                    },
+					"HeadMotion": {
+						"Type": "Watch"
+					},
+					"ActionsBlocking": true,
+					"Actions": [
+						{
+							"Type": "PlayAnimation",
+							"Slot": "Status",
+							"Animation": "Swipe"
+						},
+						{
+							"Type": "Timeout",
+							"Delay": [0.1, 0.1],
+							"Action": {
+								"Type": "Sequence",
+								"Actions": [
+									{
+										"Type": "Remove"
+									},
+									{
+										"Type": "State",
+										"State": "Eat"
+									}
+								]
+							}
+						}
+					]
                 },
                 {
                     "Continue": true,
                     "Sensor": {
                         "Type": "Mob",
                         "Range": 5,
-                        "Filters": {
-                            "Type": "NPCGroup",
-                            "IncludeGroups": { "Compute": "FoodNPCGroups" }
-                        },
-                        "Type": "LineOfSight",
-                        "HeadMotion": {
-                            "Type": "Watch"
-                        }
-                    }
+                        "Filters": [
+							{
+								"Type": "NPCGroup",
+								"IncludeGroups": { "Compute": "FoodNPCGroups" }
+							},
+							{
+								"Type": "LineOfSight"
+							}
+						]
+                    },
+					"HeadMotion": {
+						"Type": "Watch"
+					}
                 },
                 {
                     "Reference": "Component_Instruction_State_Timeout",
@@ -617,11 +637,11 @@ authors:
                             {
                                 "Type": "LineOfSight"
                             }
-                        ],
-                        "HeadMotion": {
-                            "Type": "Watch"
-                        }
-                    }
+                        ]
+                    },
+					"HeadMotion": {
+						"Type": "Watch"
+					}
                 },
                 {
                     "Sensor": {
@@ -662,14 +682,14 @@ authors:
                                     {
                                         "Type": "LineOfSight"
                                     }
-                                ],
-                                "Actions": [
-                                    {
-                                        "Type": "State",
-                                        "State": ".Default"
-                                    }
                                 ]
-                            }
+                            },
+							"Actions": [
+								{
+									"Type": "State",
+									"State": ".Default"
+								}
+							]
                         },
                         {
                             "Reference": "Component_Instruction_Soft_Leash",
@@ -786,119 +806,120 @@ authors:
                 }
             ]
         },
-        {
-            "Sensor": {
-                "Type": "State",
-                "State": "Search"
-            },
-            "Instructions": [
-                {
-                    "Sensor": {
-                        "Type": "Damage",
-                        "Combat": true,
-                        "TargetSlot": "LockedTarget"
-                    },
-                    "Actions": [
-                        {
-                            "Type": "State",
-                            "State": "Alerted"
-                        }
-                    ]
-                },
-                {
-                    "Instructions": [
-                        {
-                            "Sensor": {
-                                "Reference": "Component_Sensor_Lost_Target_Detection",
-                                "Modify": {
-                                    "ViewRange": { "Compute": "ViewRange" },
-                                    "ViewSector": { "Compute": "ViewSector" },
-                                    "HearingRange": { "Compute": "HearingRange" },
-                                    "AbsoluteDetectionRange": { "Compute": "AbsoluteDetectionRange" },
-                                    "TargetSlot": "LockedTarget"
-                                },
-                                "Actions": [
-                                    {
-                                        "Type": "State",
-                                        "State": "Combat"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "Sensor": {
-                                "Reference": "Component_Sensor_Standard_Detection",
-                                "Modify": {
-                                    "ViewRange": { "Compute": "ViewRange" },
-                                    "ViewSector": { "Compute": "ViewSector" },
-                                    "HearingRange": { "Compute": "HearingRange" },
-                                    "Absolute DetectionRange": { "Compute": "AbsoluteDetectionRange" },
-                                    "Attitudes": ["Hostile", "Neutral"]
-                                },
-                                "Actions": [
-                                    {
-                                        "Type": "State",
-                                        "State": "Alerted"
-                                    }
-                                ]
-                            },
-                            "BodyMotion": {
-                                "Type": "Sequence",
-                                "Motions": [
-                                    {
-                                        "Type": "Timer",
-                                        "Time": [3, 6],
-                                        "Motion": {
-                                            "Type": "Wander",
-                                            "MaxHeadingChange": 1,
-                                            "RelativeSpeed": 0.5
-                                        }
-                                    },
-                                    {
-                                        "Type": "Sequence",
-                                        "Looped": true,
-                                        "Motions": [
-                                            {
-                                                "Type": "Timer",
-                                                "Time": [3, 6],
-                                                "Motion": {
-                                                    "Type": "WanderInCircle",
-                                                    "Radius": 10,
-                                                    "MaxHeadingChange": 60,
-                                                    "RelativeSpeed": 0.5
-                                                }
-                                            },
-                                            {
-                                                "Type": "Timer",
-                                                "Time": [2, 3],
-                                                "Motion": {
-                                                    "Type": "Nothing"
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "ActionsBlocking": true,
-                    "Actions": [
-                        {
-                            "Type": "Timeout",
-                            "Delay": [4, 5]
-                        },
-                        {
-                            "Type": "State",
-                            "State": "Idle"
-                        }
-                    ]
-                }
-            ]
-        }
+		{
+			"Sensor": {
+				"Type": "State",
+				"State": "Search"
+			},
+			"Instructions": [
+				{
+					"Sensor": {
+						"Type": "Damage",
+						"Combat": true,
+						"TargetSlot": "LockedTarget"
+					},
+					"Actions": [
+						{
+							"Type": "State",
+							"State": "Alerted"
+						}
+					]
+				},
+				{
+					"Instructions": [
+						{
+							"Sensor": {
+								"Reference": "Component_Sensor_Lost_Target_Detection",
+								"Modify": {
+									"ViewRange": { "Compute": "ViewRange" },
+									"ViewSector": { "Compute": "ViewSector" },
+									"HearingRange": { "Compute": "HearingRange" },
+									"AbsoluteDetectionRange": { "Compute": "AbsoluteDetectionRange" },
+									"TargetSlot": "LockedTarget"
+								}
+							},
+							"Actions": [
+								{
+									"Type": "State",
+									"State": "Combat"
+								}
+							]
+						},
+						{
+							"Sensor": {
+								"Reference": "Component_Sensor_Standard_Detection",
+								"Modify": {
+									"ViewRange": { "Compute": "ViewRange" },
+									"ViewSector": { "Compute": "ViewSector" },
+									"HearingRange": { "Compute": "HearingRange" },
+									"AbsoluteDetectionRange": { "Compute": "AbsoluteDetectionRange" },
+									"Attitudes": ["Hostile", "Neutral"]
+								}
+							},
+							"Actions": [
+								{
+									"Type": "State",
+									"State": "Alerted"
+								}
+							]
+						},
+						{
+							"BodyMotion": {
+								"Type": "Sequence",
+								"Motions": [
+									{
+										"Type": "Timer",
+										"Time": [3, 6],
+										"Motion": {
+											"Type": "Wander",
+											"MaxHeadingChange": 1,
+											"RelativeSpeed": 0.5
+										}
+									},
+									{
+										"Type": "Sequence",
+										"Looped": true,
+										"Motions": [
+											{
+												"Type": "Timer",
+												"Time": [3, 6],
+												"Motion": {
+													"Type": "WanderInCircle",
+													"Radius": 10,
+													"MaxHeadingChange": 60,
+													"RelativeSpeed": 0.5
+												}
+											},
+											{
+												"Type": "Timer",
+												"Time": [2, 3],
+												"Motion": {
+													"Type": "Nothing"
+												}
+											}
+										]
+									}
+								]
+							},
+							"ActionsBlocking": true,
+							"Actions": [
+								{
+									"Type": "Timeout",
+									"Delay": [4, 5]
+								},
+								{
+									"Type": "State",
+									"State": "Idle"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
     ],
     "NameTranslationKey": { "Compute": "NameTranslationKey" }
 }
-
 ```
 
 ### Goblin_Ogre_Tutorial role file
@@ -934,7 +955,6 @@ authors:
         }
     }
 }
-
 ```
 
 ### Goblin_Ogre_Swing_Down file
@@ -948,7 +968,7 @@ authors:
     },
     "$Comment": "Prepare Delay",
     "RunTime": 0.2,
-    "Next": [
+    "Next": 
         {
             "Type": "Selector",
             "$Comment": "Length of Combat",
@@ -977,16 +997,14 @@ authors:
                         "Var": "Melee_SwingDown_Damage"
                     }
                 ]
-            }
-        },
-        {
-            "Type": "Simple",
-            "SComment": "Pad the interaction length",
-            "RunTime": 0.1
-        }
-    ]
+            },
+			"Next": {
+				"Type": "Simple",
+				"$Comment": "Pad the interaction length",
+				"RunTime": 0.1
+			}
+		},
 }
-
 ```
 
 ### Root_NPC_Goblin_Ogre_Attack
@@ -994,21 +1012,23 @@ authors:
 (you need this file to exist, because template is referencing it)
 
 ```json
-{
-    "Interactions": [
-        {
-            "Type": "Chaining",
-            "ChainId": "Slashes",
-            "ChainingAllowance": 15,
-            "Next": [
-                "Goblin_Ogre_Swing_Left",
-                "Goblin_Ogre_Swing_Right",
-                "Goblin_Ogre_Swing_Down"
-            ],
-            "Tags": {
-                "Attack": "Melee"
-            }
-        }
-    ]
+{ 
+	"Interactions": [
+		{
+			"Type": "Chaining",
+			"ChainId": "Slashes",
+			"ChainingAllowance": 15,
+			"Next": [
+				"Goblin_Ogre_Swing_Left",
+				"Goblin_Ogre_Swing_Right",
+				"Goblin_Ogre_Swing_Down"
+			]
+		}
+	],
+	"Tags": {
+		"Attack": [
+			"Melee"
+		]
+	}
 }
 ```

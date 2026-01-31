@@ -20,17 +20,20 @@ But what if we *don't* find any food? We should probably still pretend to go loo
 We start by creating our **.FindFood** substate immediately after **.Guard**.
 
 ```json
-"Sensor": {
-    "Type": "State",
-    "State": ".Guard"
+{
+	"Sensor": {
+		"Type": "State",
+		"State": ".Guard"
+	},
+	"Instructions": [ ... ],
 },
-"Instructions": [ ... ],
-"Sensor": {
-    "Type": "State",
-    "State": ".FindFood"
-},
-"Instructions": [ ... ]
-
+{
+	"Sensor": {
+		"Type": "State",
+		"State": ".FindFood"
+	},
+	"Instructions": [ ... ]
+}
 ```
 
 We then add it to our list of random actions.
@@ -77,25 +80,27 @@ Okay. That makes things significantly easier! We can now cross off one of our id
 So let's remove **.FindFood** and jump straight to **Eat**, adding the same logic we added to the other idle states. We also need to remember to update the reference in the list of random actions so that it points to the correct state!
 
 ```json
-"Sensor": {
-    "Type": "State",
-    "State": "Eat"
-},
-"Instructions": [
-    {
-        "ActionsBlocking": true,
-        "Actions": [
-            {
-                "Type": "Timeout",
-                "Delay": [5, 10]
-            },
-            {
-                "Type": "State",
-                "State": "Idle"
-            }
-        ]
-    }
-]
+{
+	"Sensor": {
+		"Type": "State",
+		"State": "Eat"
+	},
+	"Instructions": [
+		{
+			"ActionsBlocking": true,
+			"Actions": [
+				{
+					"Type": "Timeout",
+					"Delay": [5, 10]
+				},
+				{
+					"Type": "State",
+					"State": "Idle"
+				}
+			]
+		}
+	]
+}
 
 ```
 
@@ -124,32 +129,34 @@ To accommodate that, let's add an **EatItem** parameter and accompanying descrip
 Now we just need to set up another **PlayAnimation** action, much like in the **Sleep** state, to handle the eating itself.
 
 ```json
-"Sensor": {
-    "Type": "State",
-    "State": "Eat"
-},
-"Instructions": [
-    {
-        "Continue": true,
-        "ActionsBlocking": true,
-        "Actions": [
-            {
-                "Type": "Timeout",
-                "Delay": [5, 10]
-            },
-            {
-                "Type": "State",
-                "State": "Idle"
-            }
-        ]
-    },
-    {
-        "Reference": "Component_Instruction_Play_Animation",
-        "Modify": {
-            "Animation": "Eat"
-        }
-    }
-]
+{
+	"Sensor": {
+		"Type": "State",
+		"State": "Eat"
+	},
+	"Instructions": [
+		{
+			"Continue": true,
+			"ActionsBlocking": true,
+			"Actions": [
+				{
+					"Type": "Timeout",
+					"Delay": [5, 10]
+				},
+				{
+					"Type": "State",
+					"State": "Idle"
+				}
+			]
+		},
+		{
+			"Reference": "Component_Instruction_Play_Animation",
+			"Modify": {
+				"Animation": "Eat"
+			}
+		}
+	]
+}
 
 ```
 
@@ -287,27 +294,30 @@ Now our ogre will happily pull out a chunk of meat, start eating it, and then pu
 Perfect! The last thing we'll do, just to be sure we don't end up in any strange states if the goblin unloads while eating, is make sure we also switch to the correct weapon at the beginning of the idle state.
 
 ```json
-"Sensor": {
-    "Type": "State",
-    "State": "Idle"
-},
-"Instructions": [
-    {
-        "Continue": true,
-        "Sensor": {
-            "Type": "Any",
-            "Once": true
-        },
-        "Actions": [
-            {
-                "Type": "Inventory",
-                "Operation": "EquipHotbar",
-                "Slot": 0,
-                "UseTarget": false
-            }
-        ]
-    }
-]
+{
+	"Sensor": {
+		"Type": "State",
+		"State": "Idle"
+	},
+	"Instructions": [
+		{
+			"Continue": true,
+			"Sensor": {
+				"Type": "Any",
+				"Once": true
+			},
+			"Actions": [
+				{
+					"Type": "Inventory",
+					"Operation": "EquipHotbar",
+					"Slot": 0,
+					"UseTarget": false
+				}
+			]
+		},
+		...
+	]
+}
 
 ```
 

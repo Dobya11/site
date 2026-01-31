@@ -69,7 +69,7 @@ So let's quickly refactor the existing **Idle** state to reflect this change, an
 
 ```
 
-Looking at the modified **Idle** state instruction, we now have two substates: **.Default** and ***.Guard**.
+Looking at the modified **Idle** state instruction, we now have two substates: **.Default** and **.Guard**.
 
 If we spawn this NPC next to a path marker, it'll act exactly as it did before. The difference now is that it first executes the **Random** action in the **.Default** substate which picks the only available state action and sends the ogre to **.Guard**. We've set the **Weight** to be 100 for now, but it doesn't matter since there are no other choices anyway and we'll balance these better later (perhaps even for months after initial implementation!)
 
@@ -86,30 +86,31 @@ But wait! There's nothing to send the ogre back to try and do something differen
 This is actually pretty simple; we'll just add an instruction with **ActionsBlocking**, a **Timeout**, and **Continue** to the **.Guard** substate that will send it back to **.Default** after a randomised amount of time so it can make a new pick.
 
 ```json
-"Sensor": {
-    "Type": "State",
-    "State": ".Guard"
-},
-"Instructions": [
-    {
-        "Continue": true,
-        "ActionsBlocking": true,
-        "Actions": [
-            {
-                "Type": "Timeout",
-                "Delay": [15, 30]
-            },
-            {
-                "Type": "State",
-                "State": ".Default"
-            }
-        ]
+{
+    "Sensor": {
+        "Type": "State",
+        "State": ".Guard"
     },
-    {
-        "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
-    }
-]
-
+    "Instructions": [
+        {
+            "Continue": true,
+            "ActionsBlocking": true,
+            "Actions": [
+                {
+                    "Type": "Timeout",
+                    "Delay": [15, 30]
+                },
+                {
+                    "Type": "State",
+                    "State": ".Default"
+                }
+            ]
+        },
+        {
+            "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
+        }
+    ]
+}
 ```
 
 The **ActionsBlocking** is important here because it ensures we don't execute the switch between states until the first action is complete (the **Timeout**). So now we'll hang around at the path marker for between **fifteen** and **thirty** seconds before going back to pick something else to do.
