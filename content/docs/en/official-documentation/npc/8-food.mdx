@@ -17,7 +17,7 @@ This one might be a bit trickier. When we pick this behaviour we need to scan th
 
 But what if we *don't* find any food? We should probably still pretend to go looking for it - it's not like this ogre is omniscient and already knows there's no food where it expects it because the sensor said there wasn't...*right?*
 
-We start by creating our `.FindFood` substate immediately after `.Guard`.
+We start by creating our **.FindFood** substate immediately after **.Guard**.
 
 ```json
 "Sensor": {
@@ -69,12 +69,12 @@ A quick discussion with our designers reveals we've been working under an incorr
 
 Okay. That makes things significantly easier! We can now cross off one of our idle substates:
 
-* Default (pick the random behaviour state to switch to)
-* Guard (stand guard)
-* ~~FindFood (go search for some nearby food if it exists)~~
-* EatRat (murder an innocent nearby rat - we're still ignoring this for now)
+* .Default (pick the random behaviour state to switch to)
+* .Guard (stand guard)
+* ~~.FindFood (go search for some nearby food if it exists)~~
+* .EatRat (murder an innocent nearby rat - we're still ignoring this for now)
 
-So let's remove `.FindFood` and jump straight to `Eat`, adding the same logic we added to the other idle states. We also need to remember to update the reference in the list of random actions so that it points to the correct state!
+So let's remove **.FindFood** and jump straight to **Eat**, adding the same logic we added to the other idle states. We also need to remember to update the reference in the list of random actions so that it points to the correct state!
 
 ```json
 "Sensor": {
@@ -101,7 +101,7 @@ So let's remove `.FindFood` and jump straight to `Eat`, adding the same logic we
 
 We don't actually know for sure what food this ogre has in his pockets and it's probably something that might get changed in the future, or be nice to make easily changeable in variants.
 
-To accommodate that, let's add an `EatItem` parameter and accompanying description to the parameters block.
+To accommodate that, let's add an **EatItem** parameter and accompanying description to the parameters block.
 
 ```json
 "Parameters": {
@@ -110,7 +110,7 @@ To accommodate that, let's add an `EatItem` parameter and accompanying descripti
         "Description": "Model to be used"
     },
     "EatItem": {
-        "Value": "Food Beef Raw",
+        "Value": "Food_Beef_Raw",
         "Description": "The item this NPC will find when it rummages for food"
     },
     "DropList": {
@@ -121,7 +121,7 @@ To accommodate that, let's add an `EatItem` parameter and accompanying descripti
 
 ```
 
-Now we just need to set up another `PlayAnimation` action, much like in the `Sleep` state, to handle the eating itself.
+Now we just need to set up another **PlayAnimation** action, much like in the **Sleep** state, to handle the eating itself.
 
 ```json
 "Sensor": {
@@ -144,7 +144,7 @@ Now we just need to set up another `PlayAnimation` action, much like in the `Sle
         ]
     },
     {
-        "Reference": "Component Instruction_Play Animation",
+        "Reference": "Component_Instruction_Play_Animation",
         "Modify": {
             "Animation": "Eat"
         }
@@ -160,14 +160,14 @@ This looks *awfully* familiar... Could this be something we want to do often in 
     "Type": "Component",
     "Class": "Instruction",
     "Parameters": {
-        "ImportStates": ["Main"],
+        "_ImportStates": ["Main"],
         "Animation": {
             "Value": "",
             "Description": "The animation to play"
         },
         "Duration": {
-            "Value": [5, 10],
-            "Description": "The amount of Lime to walt before transitioning"
+            "Value": [3, 5],
+            "Description": "The amount of time to walt before transitioning"
         }
     },
     "Content": {
@@ -181,7 +181,7 @@ This looks *awfully* familiar... Could this be something we want to do often in 
                 }
             },
             {
-                "Reference": "Component Instruction Play Animat Lon",
+                "Reference": "Component_Instruction_Play_Animation",
                 "Modify": {
                     "Animation": { "Compute": "Animation" }
                 }
@@ -199,22 +199,22 @@ Now we need to apply it to both places in the ogre template.
 ```json
 "Sensor": {
     "Type": "State",
-    "State": "Bat"
+    "State": "Eat"
 },
 "Instructions": [
     {
-        "Reference": "Component Instruction Play Animation In State For Duration",
+        "Reference": "Component_Instruction_Play_Animation_In_State_For_Duration",
         "Modify": {
             "ExportStates": ["Idle.Default"],
             "Animation": "Eat",
-            "Duration": [5, 10]
+            "Duration": [15, 20]
         }
     }
 ]
 
 ```
 
-Only `Eat` is pictured here, but you can imagine the same changes being made to `Sleep` too.
+Only **Eat** is pictured here, but you can imagine the same changes being made to **Sleep** too.
 
 Now why aren't we converting the whole state itself into a component? There's a pretty good reason behind that: we haven't added entity detection yet and we almost surely will. This will need to live in the state alongside the other logic, so we can't exactly push the whole state itself into a component.
 
@@ -222,6 +222,7 @@ There's one last thing we need to do to make this ogre actually eat - take out t
 
 ```json
 "StateTransitions": [
+    ...
     {
         "States": {
             "From": ["Idle"],
@@ -247,7 +248,7 @@ There's one last thing we need to do to make this ogre actually eat - take out t
 
 ```
 
-There's a few important things to note here. This combination of actions will place the item from the EatItem parameter we defined earlier into slot 2 of its hotbar, and then switch to using that slot. We have to define it as `UseTarget: false` to ensure that it acts on the ogre itself.
+There's a few important things to note here. This combination of actions will place the item from the **EatItem** parameter we defined earlier into slot 2 of its hotbar, and then switch to using that slot. We have to define it as **UseTarget: false** to ensure that it acts on the ogre itself.
 
 By default, NPCs have three hotbar slots, so we've set it to use the last slot for this purpose (slots are numbered starting from zero).
 
@@ -276,6 +277,8 @@ So this handles actually pulling out the food to eat it, but not putting it away
 ```
 
 Now our ogre will happily pull out a chunk of meat, start eating it, and then put it away again when it's done!
+
+![npc-tutorial 3](/assets/official-documentation/npc/npc-tutorial-3.jpg)
 
 Perfect! The last thing we'll do, just to be sure we don't end up in any strange states if the goblin unloads while eating, is make sure we also switch to the correct weapon at the beginning of the idle state.
 

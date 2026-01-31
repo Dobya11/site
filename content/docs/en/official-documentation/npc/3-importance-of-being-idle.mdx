@@ -7,11 +7,11 @@ authors:
 
 <OfficialDocumentationNotice />
 
-There's no particular rule for the order in which we should tackle states either, but I like to start with the Idle state.
+There's no particular rule for the order in which we should tackle states either, but I like to start with the **Idle** state.
 
 First we need to add the state to the template. We do this in two steps.
 
-**1. Set up the Idle state in the instructions:**
+1. Set up the **Idle** state in the instructions:
 
 ```json
 "Instructions": [
@@ -28,9 +28,9 @@ First we need to add the state to the template. We do this in two steps.
 
 ```
 
-Here we've added the state sensor and corresponding instruction that will hold and define the contents of the Idle state.
+Here we've added the state sensor and corresponding instruction that will hold and define the contents of the **Idle** state.
 
-**2. Set the default starting state for the NPC:**
+2. Set the default starting state for the NPC:
 
 ```json
 "Appearance": { "Compute": "Appearance" },
@@ -40,9 +40,9 @@ Here we've added the state sensor and corresponding instruction that will hold a
 
 ```
 
-This is a simple case of adding the `StartState` line alongside the other header fields and setting it to be the Idle state.
+This is a simple case of adding the **StartState** line alongside the other header fields and setting it to be the **Idle** state.
 
-Now we add the first substate within this, which we already decided would just be a plain Default substate.
+Now we add the first substate within this, which we already decided would just be a plain **.Default** substate.
 
 ```json
 "Instructions": [
@@ -55,7 +55,7 @@ Now we add the first substate within this, which we already decided would just b
             {
                 "Sensor": {
                     "Type": "State",
-                    "State": "Default"
+                    "State": ".Default"
                 },
                 "Instructions": []
             }
@@ -65,7 +65,7 @@ Now we add the first substate within this, which we already decided would just b
 
 ```
 
-This functions the same way as its parent Idle state, but we don't need to specify it as a starting state anywhere because it's using the default name.
+This functions the same way as its parent **Idle** state, but we don't need to specify it as a starting state anywhere because it's using the default name.
 
 The first behaviour we're adding here is the 'protect the entrance of the Goblin POI' behaviour. We already identified an existing component we can use for this, so let's add that immediately.
 
@@ -74,11 +74,11 @@ The first behaviour we're adding here is the 'protect the entrance of the Goblin
     {
         "Sensor": {
             "Type": "State",
-            "State": "Default"
+            "State": ".Default"
         },
         "Instructions": [
             {
-                "Reference": "Component Instruction_Intelligent_Idle Motion Follow Fath"
+                "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
             }
         ]
     }
@@ -86,8 +86,10 @@ The first behaviour we're adding here is the 'protect the entrance of the Goblin
 
 ```
 
-If we want, we can use a Modify block to set a range within which to follow this path or a particular way to follow it, but since we only want it to stand guard and expect it to spawn near its target marker, we can ignore both of those for now.
+If we want, we can use a **Modify** block to set a range within which to follow this path or a particular way to follow it, but since we only want it to stand guard and expect it to spawn near its target marker, we can ignore both of those for now.
 
-Straight away we can jump in-game and spawn our ogre using `/npc spawn Goblin_Ogre`. If we add a single path marker with `/path new Test`, he'll happily go and stand guard there without doing anything else.
+Straight away we can jump in-game and spawn our ogre using **/npc spawn Goblin_Ogre**. If we add a single path marker with **/path new Test**, he'll happily go and stand guard there without doing anything else.
+
+![npc-tutorial](/assets/official-documentation/npc/npc-tutorial-1.jpg)
 
 And there we go! First idle behaviour is now complete!

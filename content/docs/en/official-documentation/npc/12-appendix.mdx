@@ -18,7 +18,7 @@ authors:
     "Type": "Abstract",
     "Parameters": {
         "Appearance": {
-            "Value": "bear_Grizzly",
+            "Value": "Bear_Grizzly",
             "Description": "Model to be used"
         },
         "DropList": {
@@ -30,23 +30,23 @@ authors:
             "Description": "Max health for the NPO"
         },
         "EatItem": {
-            "Value": "Food Beef Raw",
-            "Description": "The item thìa NPC will find when it rummages for food"
+            "Value": "Food_Beef_Raw",
+            "Description": "The item this NPC will find when it rummages for food"
         },
         "SleepingAttack": {
-            "Value": "Root_NPC_Attack Melee",
+            "Value": "Root_NPC_Attack_Melee",
             "Description": "Attack to use on NPCs that annoy it while sleeping"
         },
         "FoodNPCGroups": {
-            "Value": ["Edible Rat"],
+            "Value": ["Edible_Rat"],
             "Description": "The groups of edible WPCs that will come from triggering the beacon"
         },
         "FoodNPCBeacon": {
-            "Value": "Edible Rat",
+            "Value": "Edible_Rat",
             "Description": "The spawn beacon to trigger to create an edible NPC"
         },
         "FoodNPCItem": {
-            "Value": "Food Cheese",
+            "Value": "Food_Cheese",
             "Description": "The edible NPC in item form"
         },
         "ViewRange": {
@@ -82,7 +82,7 @@ authors:
             "Description": "This NPCs attitude group"
         },
         "Attack": {
-            "Value": "Root NPC Goblin Ogre Attack",
+            "Value": "Root_NPC_Goblin_Ogre_Attack",
             "Description": "The attack to use."
         },
         "AttackDistance": {
@@ -93,7 +93,7 @@ authors:
             "Value": [1.5, 2],
             "Description": "The zange for absolute minimum time before an MPC can execute a second attack (or block)."
         },
-        "CombatRelative TurnSpeed": {
+        "CombatRelativeTurnSpeed": {
             "value": 1.5,
             "Description": "Modifier that decides turn speed difference in combat."
         },
@@ -119,7 +119,7 @@ authors:
         }
     },
     "Appearance": { "Compute": "Appearance" },
-    "DropList": { "Compute": "Droplist" },
+    "DropList": { "Compute": "DropList" },
     "MaxHealth": { "Compute": "MaxHealth" },
     "StartState": "Idle",
     "DefaultPlayerAttitude": "Hostile",
@@ -131,20 +131,20 @@ authors:
             "Type": "Walk",
             "MaxWalkSpeed": 3,
             "Gravity": 10,
-            "MaxFallSpeed": 3,
+            "MaxFallSpeed": 8,
             "Acceleration": 10
         }
     ],
     "InteractionVars": {
-        "Melee Damage": {
+        "Melee_Damage": {
             "Interactions": [
                 {
-                    "$Comment": "Config for a successful melee hit, default values for Effects and Hitshape are not overwritten here, see each NPC file",
+                    "$Comment": "Config for a successful melee hit, default values for Effects and Hitshape are not overwritten here, see each NPC_ file",
                     "Parent": "NPC_Attack_Melee_Damage",
                     "DamageCalculator": {
                         "Type": "Absolute",
                         "BaseDamage": {
-                            "Physical": 4,
+                            "Physical": 10,
                             "RandomPercentageModifier": 0.1
                         }
                     }
@@ -178,7 +178,7 @@ authors:
             "Actions": [
                 {
                     "Type": "PlayAnimation",
-                    "Slot": "status",
+                    "Slot": "Status",
                     "Animation": "Wake"
                 },
                 {
@@ -259,7 +259,7 @@ authors:
                 },
                 {
                     "Type": "Beacon",
-                    "Message": "Gobliny ogre_Warn",
+                    "Message": "Goblin_Ogre_Warn",
                     "TargetGroups": { "Compute": "WarnGroups" },
                     "SendTargetSlot": "LockedTarget"
                 }
@@ -289,19 +289,19 @@ authors:
                     ]
                 },
                 {
-                    "Reference": "Component Instruction Damage Chack",
+                    "Reference": "Component_Instruction_Damage_Chack",
                     "Modify": {
-                        "ExportStates": ["Alerted", "Merted"],
+                        "ExportStates": ["Alerted", "Alerted"],
                         "AlertedRange": { "Compute": "AlertedRange" }
                     }
                 },
                 {
                     "$Comment": "Check for any hostile targets in range that could alert the NPC",
                     "Sensor": {
-                        "Reference": "Component Sensor_Standard Detection",
+                        "Reference": "Component_Sensor_Standard_Detection",
                         "Modify": {
                             "ViewRange": { "Compute": "ViewRange" },
-                            "ViewSector": { "Compute": "VievSector" },
+                            "ViewSector": { "Compute": "ViewSector" },
                             "HearingRange": { "Compute": "HearingRange" },
                             "ThroughWalls": false,
                             "AbsoluteDetectionRange": { "Compute": "AbsoluteDetectsonRange" },
@@ -318,7 +318,7 @@ authors:
                 {
                     "Sensor": {
                         "Type": "State",
-                        "State": "Default"
+                        "State": ".Default"
                     },
                     "Instructions": [
                         {
@@ -330,7 +330,7 @@ authors:
                                             "Weight": 10,
                                             "Action": {
                                                 "Type": "State",
-                                                "State": "Guard"
+                                                "State": ".Guard"
                                             }
                                         },
                                         {
@@ -343,8 +343,8 @@ authors:
                                         {
                                             "Weight": 10,
                                             "Action": {
-                                                "Type": "state",
-                                                "state": "Eat"
+                                                "Type": "State",
+                                                "State": "Eat"
                                             }
                                         },
                                         {
@@ -362,7 +362,7 @@ authors:
                 },
                 {
                     "Sensor": {
-                        "Type": "statell",
+                        "Type": "State",
                         "State": ".Guard"
                     },
                     "Instructions": [
@@ -372,16 +372,16 @@ authors:
                             "Actions": [
                                 {
                                     "Type": "Timeout",
-                                    "Delay": [15, 10]
+                                    "Delay": [5, 10]
                                 },
                                 {
                                     "Type": "State",
-                                    "State": "Default"
+                                    "State": ".Default"
                                 }
                             ]
                         },
                         {
-                            "Reference": "Component Instruction Intelligent_Idle Motion_Follow_Path"
+                            "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
                         }
                     ]
                 }
@@ -394,7 +394,7 @@ authors:
             },
             "Instructions": [
                 {
-                    "Reference": "Component Instruction Damage_Check",
+                    "Reference": "Component_Instruction_Damage_Check",
                     "Modify": {
                         "ExportStates": ["Alerted", "Alerted"],
                         "AlertedRange": { "Compute": "AlertedRange" }
@@ -403,35 +403,35 @@ authors:
                 {
                     "$Comment": "Check for any hostile targets in range that could alert the NPO",
                     "Sensor": {
-                        "Reference": "Component Sensor Standard Detention",
+                        "Reference": "Component_Sensor_Standard_Detection",
                         "Modify": {
                             "ViewRange": { "Compute": "ViewRange / DistractedPenalty" },
                             "ViewSector": { "Compute": "ViewSector" },
                             "HearingRange": { "Compute": "ViewRange / DistractedPenalty" },
                             "ThroughWalls": false,
-                            "Absolute DetectionRange": { "Compute": "AbsoluteDetectionRange" },
+                            "AbsoluteDetectionRange": { "Compute": "AbsoluteDetectionRange" },
                             "Attitudes": ["Hostile"]
                         },
                         "Actions": [
                             {
-                                "Type": "state",
+                                "Type": "State",
                                 "State": "Alerted"
                             }
                         ]
                     }
                 },
                 {
-                    "Reference": "Component Instruction_Play_Animation_In_State_For_Duration",
+                    "Reference": "Component_Instruction_Play_Animation_In_State_For_Duration",
                     "Modify": {
                         "ExportStates": ["Idle.Default"],
-                        "Animation": "sleep",
+                        "Animation": "Sleep",
                         "Duration": [5, 6]
                     }
                 },
                 {
                     "Sensor": {
                         "Type": "Beacon",
-                        "Message": "Annoy Ogre",
+                        "Message": "Annoy_Ogre",
                         "Range": 5
                     },
                     "Actions": [
@@ -460,7 +460,7 @@ authors:
                 {
                     "$Comment": "Check for any hostile targets in range that could alert the NPO",
                     "Sensor": {
-                        "Reference": "Component Sensor Standard Detection",
+                        "Reference": "Component_Sensor_Standard_Detection",
                         "Modify": {
                             "ViewRange": { "Compute": "ViewRange / DistractedPenalty" },
                             "ViewSector": { "Compute": "ViewSector" },
@@ -478,7 +478,7 @@ authors:
                     }
                 },
                 {
-                    "Reference": "Component Instruction_Play_Animation_In_State_For_Duration",
+                    "Reference": "Component_Instruction_Play_Animation_In_State_For_Duration",
                     "Modify": {
                         "_ExportStates": ["Idie.Default"],
                         "Animation": "Eat",
@@ -502,7 +502,7 @@ authors:
                     "Actions": [
                         {
                             "Type": "TriggerSpawnBeacon",
-                            "BeaconSpawn": { "Compute": "FoodNPUBeacon" },
+                            "BeaconSpawn": { "Compute": "FoodNPCBeacon" },
                             "Range": 15
                         }
                     ]
@@ -517,7 +517,7 @@ authors:
                 {
                     "$Comment": "Check for any hostile targets in range that could alert the NPC",
                     "Sensor": {
-                        "Reference": "Component Sensor_Standard_Detection",
+                        "Reference": "Component_Sensor_Standard_Detection",
                         "Modify": {
                             "ViewRange": { "Compute": "ViewRange" },
                             "ViewSector": { "Compute": "ViewSector" },
@@ -551,10 +551,10 @@ authors:
                             {
                                 "Type": "PlayAnimation",
                                 "Slot": "Status",
-                                "Animation": "Bwipe"
+                                "Animation": "Swipe"
                             },
                             {
-                                "Type": "meout",
+                                "Type": "Timeout",
                                 "Delay": [0.1, 0.1],
                                 "Action": {
                                     "Type": "Sequence",
@@ -563,8 +563,8 @@ authors:
                                             "Type": "Remove"
                                         },
                                         {
-                                            "Type": "state",
-                                            "state": "Dat"
+                                            "Type": "State",
+                                            "state": "Eat"
                                         }
                                     ]
                                 }
@@ -578,7 +578,7 @@ authors:
                         "Type": "Mob",
                         "Range": 5,
                         "Filters": {
-                            "Type": "MBCGroup",
+                            "Type": "NPCGroup",
                             "IncludeGroups": { "Compute": "FoodNPCGroups" }
                         },
                         "Type": "LineofSight",
@@ -588,7 +588,7 @@ authors:
                     }
                 },
                 {
-                    "Reference": "Component Instruction State Timeout",
+                    "Reference": "Component_Instruction_State_Timeout",
                     "Modify": {
                         "ExportStates": ["Idle"],
                         "Delay": [10, 15]
@@ -603,7 +603,7 @@ authors:
             },
             "Instructions": [
                 {
-                    "Reference": "Component Instruction Play Animation",
+                    "Reference": "Component_Instruction_Play_Animation",
                     "Modify": {
                         "Animation": "Alerted"
                     }
@@ -651,7 +651,7 @@ authors:
                 {
                     "Sensor": {
                         "Type": "State",
-                        "State": "Chase"
+                        "State": ".Chase"
                     },
                     "Instructions": [
                         {
@@ -666,7 +666,7 @@ authors:
                                 "Actions": [
                                     {
                                         "Type": "State",
-                                        "State": "Default"
+                                        "State": ".Default"
                                     }
                                 ]
                             }
@@ -674,7 +674,7 @@ authors:
                         {
                             "Reference": "Component_Instruction_soft_Leash",
                             "Modify": {
-                                "ExportStates": ["Return Home"],
+                                "ExportStates": ["ReturnHome"],
                                 "LeashDistance": { "Compute": "LeashDistance" },
                                 "LeashMinPlayerDistance": { "Compute": "LeashMinPlayerDistance" },
                                 "LeashTimer": { "Compute": "LeashTime" },
@@ -682,12 +682,12 @@ authors:
                             }
                         },
                         {
-                            "Reference": "Component_instruction_Intelligent_Chase",
+                            "Reference": "Component_Instruction_Intelligent_Chase",
                             "Modify": {
                                 "ExportStates": ["Search", "Search", "ReturnHome"],
-                                "ViewRange": { "Compute": "AlertedRange / 2" },
-                                "HearingRange": { "Compute": "HearingRange / 2" },
-                                "StopDistance": 0.3,
+                                "ViewRange": { "Compute": "AlertedRange * 2" },
+                                "HearingRange": { "Compute": "HearingRange * 2" },
+                                "StopDistance": 0.1,
                                 "RelativeSpeed": 0.5
                             }
                         }
@@ -697,7 +697,7 @@ authors:
                     "$Comment": "NPC melee attack",
                     "Sensor": {
                         "Type": "Target",
-                        "Range": { "Compute": "AtsackDistance" },
+                        "Range": { "Compute": "AttackDistance" },
                         "Filters": [
                             {
                                 "Type": "LineOfSight"
@@ -707,18 +707,18 @@ authors:
                         "Actions": [
                             {
                                 "Type": "Attack",
-                                "Attack": { "Compute": "Attaciem" },
-                                "AttackPauseRange": { "Compute": "Attack PauseRange" }
+                                "Attack": { "Compute": "Attack" },
+                                "AttackPauseRange": { "Compute": "AttackPauseRange" }
                             },
                             {
-                                "$Comment": "Brier delay to prevent the NPC potentially strafing/backing away and missing the shot..",
+                                "$Comment": "Brief delay to prevent the NPC potentially strafing/backing away and missing the shot.",
                                 "Type": "Timeout",
                                 "Delay": [0.2, 0.2]
                             }
                         ],
                         "HeadMotion": {
-                            "Type": "Alm",
-                            "RelativeTurnSpeed": { "Compute": "Combat Relative TurnSpeed" }
+                            "Type": "Aim",
+                            "RelativeTurnSpeed": { "Compute": "CombatRelativeTurnSpeed" }
                         }
                     },
                     "Actions": [
@@ -762,25 +762,25 @@ authors:
                 },
                 {
                     "Sensor": {
-                        "Type": "leash",
-                        "Range": { "Compute": "Leashilistance / 0.3" },
+                        "Type": "Leash",
+                        "Range": { "Compute": "LeashDistance * 0.3" },
                         "BodyMotion": {
                             "Type": "Seek",
-                            "SlowDownDistance": { "Compute": "LeashDistance / 0.4" },
-                            "StopDistance": { "Compute": "LeashDistance / 0.2" },
+                            "SlowDownDistance": { "Compute": "LeashDistance * 0.4" },
+                            "StopDistance": { "Compute": "LeashDistance * 0.2" },
                             "RelativeSpeed": 0.8,
                             "UsePathfinder": true
                         }
                     },
                     "Actions": [
                         {
-                            "Type": "SetStar",
-                            "Stat": "Heainn",
+                            "Type": "SetStat",
+                            "Stat": "Health",
                             "Value": 1000000
                         },
                         {
                             "Type": "State",
-                            "State": "Iale"
+                            "State": "Idle"
                         }
                     ]
                 }
@@ -800,7 +800,7 @@ authors:
                     },
                     "Actions": [
                         {
-                            "Type": "state",
+                            "Type": "State",
                             "State": "Alerted"
                         }
                     ]
@@ -814,7 +814,7 @@ authors:
                                     "ViewRange": { "Compute": "ViewRange" },
                                     "ViewSector": { "Compute": "ViewSector" },
                                     "HearingRange": { "Compute": "HearingRange" },
-                                    "Absolute DetectionRange": { "Compute": "AbsoluteDetectionRange" },
+                                    "AbsoluteDetectionRange": { "Compute": "AbsoluteDetectionRange" },
                                     "TargetSlot": "LockedTarget"
                                 },
                                 "Actions": [
@@ -827,7 +827,7 @@ authors:
                         },
                         {
                             "Sensor": {
-                                "Reference": "Component Sensor Standard Detection",
+                                "Reference": "Component_Sensor_Standard_Detection",
                                 "Modify": {
                                     "ViewRange": { "Compute": "ViewRange" },
                                     "ViewSector": { "Compute": "ViewSector" },
@@ -843,7 +843,7 @@ authors:
                                 ]
                             },
                             "BodyMotion": {
-                                "Type": "Sequencell",
+                                "Type": "Sequence",
                                 "Motions": [
                                     {
                                         "Type": "Timer",
@@ -911,10 +911,10 @@ authors:
         "Appearance": "Goblin",
         "MaxHealth": 124,
         "InteractionVars": {
-            "Melee SwingDown Damage": {
+            "Melee_SwingDown_Damage": {
                 "Interactions": [
                     {
-                        "Parent": "Gobian Ogre_Swing_Down_Damage",
+                        "Parent": "Gobian_Ogre_Swing_Down_Damage",
                         "DamageCalculator": {
                             "Type": "Absolute",
                             "BaseDamage": {
@@ -951,11 +951,11 @@ authors:
     "Next": [
         {
             "Type": "Selector",
-            "SComment": "Length of Combat",
+            "$Comment": "Length of Combat",
             "RunTime": 0.25,
             "Selector": {
                 "Id": "Horizontal",
-                "Direction": "Tobeft",
+                "Direction": "ToLeft",
                 "TestLineOfSight": true,
                 "ExtendTop": 0.5,
                 "ExtendBottom": 0.5,
@@ -971,7 +971,7 @@ authors:
                         "Type": "Replace",
                         "DefaultValue": {
                             "Interactions": [
-                                "Goblin Ogre_3wing_Down_Damage"
+                                "Goblin Ogre_Swing_Down_Damage"
                             ]
                         },
                         "Var": "Melee_SwingDown_Damage"
@@ -980,7 +980,7 @@ authors:
             }
         },
         {
-            "Type": "simple",
+            "Type": "Simple",
             "SComment": "Pad the interaction length",
             "RunTime": 0.1
         }
@@ -1001,8 +1001,8 @@ authors:
             "ChainId": "Slashes",
             "ChainingAllowance": 15,
             "Next": [
-                "Goblin Ogre Swing_left",
-                "Goblin Ogre Swing Right",
+                "Goblin_Ogre_Swing_Left",
+                "Goblin_Ogre_Swing_Right",
                 "Goblin_Ogre_Swing_Down"
             ],
             "Tags": {

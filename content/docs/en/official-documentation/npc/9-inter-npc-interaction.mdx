@@ -14,9 +14,9 @@ Now we need to start thinking about how to get our ogre to respond to other NPCs
 
 We'll start with the first because there are a number of problems that are going to come into play when we tackle the second.
 
-Whacking goblins takes place during the Sleep state, so we'll be doing all our editing there. We don't actually need to add any detection for this, because we're going to trust the goblin scrappers to tell us they're being annoying. This is something pretty neat about using beacons to communicate between NPCs.
+Whacking goblins takes place during the **Sleep** state, so we'll be doing all our editing there. We don't actually need to add any detection for this, because we're going to trust the goblin scrappers to *tell* us they're being annoying. This is something pretty neat about using beacons to communicate between NPCs.
 
-When one of the NPCs sends a message, it can trigger behaviour in the other. Basically, this means that the Goblin Scrapper is going to handle the bulk of this behaviour. When they go into annoy mode, they'll approach the ogre. When they're close enough, they'll send a message telling him they're being annoying, and he'll then randomly swat at them in his sleep.
+When one of the NPCs sends a message, it can trigger behaviour in the other. Basically, this means that the **Goblin Scrapper** is going to handle the bulk of this behaviour. When they go into annoy mode, they'll approach the ogre. When they're close enough, they'll send a message telling him they're being annoying, and he'll then randomly swat at them in his sleep.
 
 They're essentially actually annoying him with their message!
 
@@ -29,7 +29,7 @@ They're essentially actually annoying him with their message!
     {
         "Sensor": {
             "Type": "Beacon",
-            "Message": "Annoy Ogre",
+            "Message": "Annoy_Ogre",
             "Range": 5
         },
         "Actions": []
@@ -38,7 +38,7 @@ They're essentially actually annoying him with their message!
 
 ```
 
-This sensor listens for the `Annoy_Ogre` message and will perform its actions when receiving it, so long as it comes from an NPC that's close by. The nice thing about this is that it can respond to any NPC that decides to annoy it!
+This sensor listens for the **Annoy_Ogre** message and will perform its actions when receiving it, so long as it comes from an NPC that's close by. The nice thing about this is that it can respond to any NPC that decides to annoy it!
 
 Next we'll add an attack to it. It'll be the animators' responsibility to ensure that this meshes nicely with the sleeping animation, and we'll also expose the attack name as a parameter in the parameters block.
 
@@ -61,7 +61,7 @@ We use a placeholder attack because we don't have a real one yet.
 ```json
 "Sensor": {
     "Type": "Beacon",
-    "Message": "Annoy Ogre",
+    "Message": "Annoy_Ogre",
     "Range": 5
 },
 "Actions": [
@@ -74,9 +74,11 @@ We use a placeholder attack because we don't have a real one yet.
 
 ```
 
-We don't need another NPC to test this - we can use `/npc message Annoy_Ogre` to trigger this behaviour while looking at the ogre.
+We don't need another NPC to test this - we can use **/npc message Annoy_Ogre** to trigger this behaviour while looking at the ogre.
 
-Now that our ogre can whack those pesky scrappers, the time has come to address the rat in the room: grabbing other NPCs is hard. Just in general. We don't have that kind of capability in tech and there's no guarantee we will either.
+![npc-tutorial](/assets/official-documentation/npc/npc-tutorial-4.jpg)
+
+Now that our ogre can whack those pesky scrappers, the time has come to address the rat in the room: grabbing other NPCs is **hard**. Just in general. We don't have that kind of capability in tech and there's no guarantee we will either.
 
 A quick chat with our designers resulted in the following specification:
 
@@ -86,7 +88,7 @@ A quick chat with our designers resulted in the following specification:
 
 This clarifies things, but doesn't resolve the problems. To do this, we're going to have to be creative.
 
-First we need to actually spawn the rat somewhere near the ogre and get it to head over to be seized and eaten. We can do something like this by using a form of manual spawn beacon - an entity type which has to be placed in the world and can be triggered by other nearby NPCs on demand. We'll also need to build a small template for the rat itself to get it to move to the ogre.
+First we need to actually spawn the rat somewhere near the ogre and get it to head over to be seized and eaten. We can do something like this by using a form of **manual spawn beacon** - an entity type which has to be placed in the world and can be triggered by other nearby NPCs on demand. We'll also need to build a small template for the rat itself to get it to move to the ogre.
 
 This seems like a behaviour that could be pretty reusable, so we'll make this template as simple and generic as possible so that it can be used in conjunction with all sorts of NPCs that are meant to grab small creatures and eat them.
 
@@ -129,7 +131,7 @@ We'll call this `Template_Edible_Critter`.
             "Acceleration": 10
         }
     ],
-    "MaxHealth": { "Compute": "Maxhealth" },
+    "MaxHealth": { "Compute": "MaxHealth" },
     "Instructions": [
         {
             "Sensor": {
@@ -140,8 +142,8 @@ We'll call this `Template_Edible_Critter`.
                 {
                     "Sensor": {
                         "Type": "Beacon",
-                        "Message": "Approach target",
-                        "TargetSlot": "Lockedlarget"
+                        "Message": "Approach_Target",
+                        "TargetSlot": "LockedTarget"
                     },
                     "Actions": [
                         {
@@ -155,7 +157,7 @@ We'll call this `Template_Edible_Critter`.
                     "Actions": [
                         {
                             "Type": "Timeout",
-                            "Delay": [1, 13]
+                            "Delay": [1, 1]
                         },
                         {
                             "Type": "Despawn"
@@ -201,14 +203,14 @@ We'll call this `Template_Edible_Critter`.
 
 ```
 
-This is a really simple NPC. It allows setting an Appearance, WalkSpeed, and SeekRange so that it can encompass a variety of different critter types. If idle for too long, it'll despawn, otherwise it'll try and seek towards the NPC that's meant to eat it, either from being signalled with a beacon or from being spawned in that specific state with a specific target already defined.
+This is a really simple NPC. It allows setting an **Appearance**, **WalkSpeed**, and **SeekRange** so that it can encompass a variety of different critter types. If idle for too long, it'll despawn, otherwise it'll try and seek towards the NPC that's meant to eat it, either from being signalled with a beacon or from being spawned in that specific state with a specific target already defined.
 
-In this case, we want to do the latter, so let's define a variant (`Edible_Rat`).
+In this case, we want to do the latter, so let's define a **variant** (**Edible_Rat**).
 
 ```json
 {
     "Type": "Variant",
-    "Reference": "Template Edible Criller",
+    "Reference": "Template_Edible_Criller",
     "Modify": {
         "Appearance": "Rat",
         "WalkSpeed": 5,
@@ -225,31 +227,31 @@ In this case, we want to do the latter, so let's define a variant (`Edible_Rat`)
 
 ```
 
-...and a spawn beacon (also called `Edible_Rat`) that can create it for us.
+...and a **spawn beacon** (also called **Edible_Rat**) that can create it for us.
 
 ```json
 {
-    "Environments": [],
-    "NPCs": [
-        {
-            "Weight": 1,
-            "Id": "Edible Rat",
-            "SpawnAfterGameTimeRange": ["PTSM", "PTION"],
-            "NPCSpawnState": "Seek",
-            "TargetSlot": "LockedTarget"
-        }
-    ]
+  "Environments": [],
+  "NPCs": [
+    {
+      "Weight": 1,
+      "Id": "Edible Rat"
+    }
+  ],
+  "SpawnAfterGameTimeRange": ["PT5M", "PT10M"],
+  "NPCSpawnState": "Seek",
+  "TargetSlot": "LockedTarget"
 }
 
 ```
 
-This simple config will only spawn the rat NPC we defined and will set it to the correct state. The SpawnAfterGame Time Range parameter is required for the configuration to be used in other contexts, but isn't actually useful to us here.
+This simple config will only spawn the rat NPC we defined and will set it to the correct state. The **SpawnAfterGameTimeRange** parameter is required for the configuration to be used in other contexts, but isn't actually useful to us here.
 
-Now, if we use `/spawning beacons add Edible_Rat --manual` we can create this spawn beacon ready for our ogre to use! Level designers who want to use this behaviour will need to add this beacon somewhere in the prefab so that the rats can be spawned, but multiple ogres can share the same beacon for this purpose. We can use `/spawning beacons trigger` to make sure it works!
+Now, if we use **/spawning beacons add Edible_Rat --manual** we can create this spawn beacon ready for our ogre to use! Level designers who want to use this behaviour will need to add this beacon somewhere in the prefab so that the rats can be spawned, but multiple ogres can share the same beacon for this purpose. We can use **/spawning beacons trigger** to make sure it works!
 
 Now we just need to set up our ogre to actually spawn the rat and fake the interaction between them.
 
-As always, we start by adding the state (`CallRat` - we're actually going to make it a main state instead of using the originally planned `.EatRat` substate to take advantage of some existing states and state transitions as we talked about earlier)...
+As always, we start by adding the state (**CallRat** - we're actually going to make it a main state instead of using the originally planned **.EatRat** substate to take advantage of some existing states and state transitions as we talked about earlier)...
 
 ```json
 "Sensor": {
@@ -287,17 +289,17 @@ As always, we start by adding the state (`CallRat` - we're actually going to mak
 
 ```
 
-Our `CallRat` state will just handle triggering the beacon and then waiting for a little while to see if the rat successfully arrives. If it doesn't, we'll reset and go back to pick another idle state.
+Our **CallRat** state will just handle triggering the beacon and then waiting for a little while to see if the rat successfully arrives. If it doesn't, we'll reset and go back to pick another idle state.
 
-Faking picking up and eating the rat we'll handle by removing the rat once it gets close enough and then giving the ogre an item to hold just like we did with the previous eat state transition.
+Faking picking up and eating the rat we'll handle by **removing** the rat once it gets close enough and then giving the ogre an **item to hold** just like we did with the previous eat state transition.
 
-The only difference here is the item being eaten (and thus the specific transition itself), so we can actually just make use of the previous Eat state for handling that side of the logic!
+The only difference here is the item being eaten (and thus the specific transition itself), so we can actually just make use of the previous **Eat** state for handling that side of the logic!
 
-Before we can go any further though, we need to define an NPC group (`Edible_Rat` again) containing our edible rat and make it a parameter on the ogre so it can find it!
+Before we can go any further though, we need to define an **NPC group** (**Edible_Rat** again) containing our edible rat and make it a parameter on the ogre so it can find it!
 
 ```json
 "IncludeRoles": [
-    "Edible Rat"
+    "Edible_Rat"
 ]
 
 ```
@@ -307,18 +309,18 @@ And now we make this an exposed parameter on the ogre template. While we're at i
 ```json
 "Parameters": {
     "FoodNPCGroups": {
-        "Value": ["Edible Rat"],
+        "Value": ["Edible_Rat"],
         "Description": "The groups of edible NPCs that will come from triggering the beacon"
     },
     "FoodNPCBeacon": {
-        "Value": "Edible Rat",
+        "Value": "Edible_Rat",
         "Description": "The spawn beacon to trigger to create an edible NPC"
     }
 }
 
 ```
 
-With this done, we can implement the CallRat state logic and test that it works.
+With this done, we can implement the **CallRat** state logic and test that it works.
 
 ```json
 "Sensor": {
@@ -345,10 +347,10 @@ With this done, we can implement the CallRat state logic and test that it works.
             "Type": "Mob",
             "Range": 2.5,
             "Filters": {
-                "Type": "HECGroup",
+                "Type": "NPCGroup",
                 "IncludeGroups": { "Compute": "FoodNPCGroups" }
             },
-            "Type": "LineofSight",
+            "Type": "LineOfSight",
             "HeadMotion": {
                 "Type": "Watch"
             }
@@ -387,14 +389,14 @@ With this done, we can implement the CallRat state logic and test that it works.
                 "Type": "HPCGroup",
                 "IncludeGroups": { "Compute": "FoodNPCGroups" }
             },
-            "Type": "DineOfSight",
+            "Type": "LineOfSight",
             "HeadMotion": {
                 "Type": "Watch"
             }
         }
     },
     {
-        "Reference": "Component Step State Timeout",
+        "Reference": "Component_Step_State_Timeout",
         "Modify": {
             "ExportStates": ["Idle"],
             "Delay": [10, 15]
@@ -404,9 +406,9 @@ With this done, we can implement the CallRat state logic and test that it works.
 
 ```
 
-The logic here is pretty straightforward - we start by triggering the beacon we defined in the parameters exactly once and continuing (as defined by the Continue and Once flags). We then wait for the edible NPC matching the list of groups we provided in the parameter (which contains only our edible rat in this instance) to get close enough to grab and then play an animation with a brief delay before removing it and moving to the Eat state. We watch it for a little bit until it gets close enough so it doesn't look too bad. Note how that last pair of actions (enclosed in a sequence) is not marked as blocking - both will execute in the same tick.
+The logic here is pretty straightforward - we start by triggering the beacon we defined in the parameters exactly once and continuing (as defined by the **Continue** and **Once** flags). We then wait for the edible NPC matching the list of groups we provided in the parameter (which contains only our edible rat in this instance) to get close enough to grab and then play an animation with a brief delay before removing it and moving to the **Eat** state. We watch it for a little bit until it gets close enough so it doesn't look too bad. Note how that last pair of actions (enclosed in a **sequence**) is not marked as blocking - both will execute in the same tick.
 
-If the rat never arrives, we give it about 10-15 seconds before giving up and returning to Idle.
+If the rat never arrives, we give it about 10-15 seconds before giving up and returning to **Idle**.
 
 Now that it's working, let's implement the state transitions to make this goblin actually 'grab' the rat and start eating it. We don't have the 'rat' item yet, so we'll just use a different item as a placeholder for now.
 
@@ -416,7 +418,7 @@ We need to define this in the parameters too.
 "Parameters": [
     {
         "FoodNPCItem": {
-            "Value": "Food Cheese",
+            "Value": "Food_Cheese",
             "Description": "The edible NPC in Item form"
         }
     }
@@ -424,7 +426,7 @@ We need to define this in the parameters too.
 
 ```
 
-And then a single state transition from `CallRat` to `Eat`.
+And then a single state transition from **CallRat** to **Eat**.
 
 ```json
 {

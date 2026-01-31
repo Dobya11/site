@@ -7,7 +7,7 @@ authors:
 
 <OfficialDocumentationNotice />
 
-There are no hard and fast rules for making a start on a template. I like to duplicate Blank Template and start from there because it already provides the basic structure of the file.
+There are no hard and fast rules for making a start on a template. I like to duplicate **BlankTemplate** and start from there because it already provides the basic structure of the file.
 
 This leaves me with the following template (`Template_Goblin_Ogre.json`): (note: the file could be looking different in the current version of the game)
 
@@ -16,19 +16,19 @@ This leaves me with the following template (`Template_Goblin_Ogre.json`): (note:
     "Type": "Abstract",
     "Parameters": {
         "Appearance": {
-            "Value": "Bear Grizzly",
+            "Value": "Bear_Grizzly",
             "Description": "Model to be used"
         },
         "DropList": {
             "Value": "Empty",
-            "Description": "Orop Items"
+            "Description": "Drop Items"
         },
         "MaxHealth": {
             "Value": 100,
-            "Description": "Max health for the NPOM"
+            "Description": "Max health for the NPC"
         },
         "NameTranslationKey": {
-            "Value": "server.upcRoles.Template.name",
+            "Value": "server.npcRoles.Template.name",
             "Description": "Translation key for NPC name display"
         }
     },
@@ -64,9 +64,9 @@ And the following variant (`Goblin_Ogre.json`) next to the template. There's a t
 ```json
 {
     "Type": "Variant",
-    "Reference": "Template Goblin_Ogre",
+    "Reference": "Template_Goblin_Ogre",
     "Modify": {
-        "Appearance": "Goblin Ogre",
+        "Appearance": "Goblin_Ogre",
         "MaxHealth": 124
     }
 }
